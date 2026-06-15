@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, loadRazorpay } from "@/lib/client";
-import { PLANS } from "@/lib/types";
+import { COMMON_LIMITS, PLANS } from "@/lib/types";
 import type { SafeUser } from "@/lib/auth";
 import { TermsModal } from "./TermsModal";
 
@@ -16,8 +16,9 @@ export function Pricing({
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState("");
-  const [termsOpen, setTermsOpen] = useState(false);
-  const [paidTerms, setPaidTerms] = useState(false);
+  const [termsModal, setTermsModal] = useState<null | "general" | "guarantee">(null);
+  const [paidGuarantee, setPaidGuarantee] = useState(false);
+  const paidPlanRef = useRef<string | null>(null);
 
   async function choose(planId: string) {
     setErr("");
@@ -25,6 +26,7 @@ export function Pricing({
       router.push("/signup");
       return;
     }
+    paidPlanRef.current = planId;
     setBusy(planId);
     try {
       const order = await api<any>("/api/razorpay/order", {
@@ -90,7 +92,8 @@ export function Pricing({
 
   function done() {
     setBusy(null);
-    setPaidTerms(true); // show the guarantee T&C after successful payment
+    // Show the 47-Day Growth Guarantee terms only after a Creator (₹499) payment.
+    if (paidPlanRef.current === "creator") setPaidGuarantee(true);
     onSubscribed?.();
     router.refresh();
   }
@@ -174,7 +177,7 @@ export function Pricing({
                         </p>
                         <button
                           type="button"
-                          onClick={() => setTermsOpen(true)}
+                          onClick={() => setTermsModal("guarantee")}
                           className="mt-1.5 text-[11px] font-semibold text-emerald-700 underline underline-offset-2 hover:text-emerald-900"
                         >
                           Terms &amp; conditions
@@ -206,11 +209,43 @@ export function Pricing({
             );
           })}
         </div>
+
+        {/* Common limits + terms acceptance */}
+        <div className="mx-auto mt-10 max-w-3xl">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-slate-500">
+            {COMMON_LIMITS.map((l) => (
+              <span key={l} className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+                {l}
+              </span>
+            ))}
+          </div>
+          <p className="mt-4 text-center text-xs text-slate-400">
+            Priority processing on the Pro plan. By subscribing to any plan you
+            agree to our{" "}
+            <button
+              onClick={() => setTermsModal("general")}
+              className="font-semibold text-violet-600 underline underline-offset-2 hover:text-violet-700"
+            >
+              Terms &amp; Conditions
+            </button>
+            .
+          </p>
+        </div>
       </div>
     </section>
 
-    <TermsModal open={termsOpen} onClose={() => setTermsOpen(false)} />
-    <TermsModal paid open={paidTerms} onClose={() => setPaidTerms(false)} />
+    <TermsModal
+      open={termsModal !== null}
+      kind={termsModal || "general"}
+      onClose={() => setTermsModal(null)}
+    />
+    <TermsModal
+      open={paidGuarantee}
+      kind="guarantee"
+      paid
+      onClose={() => setPaidGuarantee(false)}
+    />
     </>
   );
 }

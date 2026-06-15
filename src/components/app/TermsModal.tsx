@@ -1,13 +1,24 @@
 "use client";
 import { useEffect } from "react";
-import { GUARANTEE_TERMS, GUARANTEE_TERMS_INTRO } from "@/lib/terms";
+import {
+  GENERAL_TERMS,
+  GENERAL_TERMS_HIGHLIGHT,
+  GENERAL_TERMS_INTRO,
+  GUARANTEE_TERMS,
+  GUARANTEE_TERMS_HIGHLIGHT,
+  GUARANTEE_TERMS_INTRO,
+} from "@/lib/terms";
+
+type Kind = "general" | "guarantee";
 
 export function TermsModal({
   open,
+  kind = "general",
   paid,
   onClose,
 }: {
   open: boolean;
+  kind?: Kind;
   paid?: boolean;
   onClose: () => void;
 }) {
@@ -19,42 +30,78 @@ export function TermsModal({
 
   if (!open) return null;
 
+  const isGuarantee = kind === "guarantee";
+  const intro = isGuarantee ? GUARANTEE_TERMS_INTRO : GENERAL_TERMS_INTRO;
+  const highlight = isGuarantee ? GUARANTEE_TERMS_HIGHLIGHT : GENERAL_TERMS_HIGHLIGHT;
+  const sections = isGuarantee ? GUARANTEE_TERMS : GENERAL_TERMS;
+  const accent = isGuarantee ? "emerald" : "violet";
+
   return (
     <div className="fixed inset-0 z-[700] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl bg-white shadow-2xl animate-scale-in">
+      <div className="absolute inset-0 bg-slate-900/55 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-10 flex max-h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl animate-scale-in">
         {/* Header */}
         {paid ? (
           <div className="bg-gradient-to-br from-emerald-50 to-teal-50 px-6 py-7 text-center">
-            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100">
-              <svg className="h-7 w-7 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+            <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl animate-bounce-in">
+              ⭐
             </div>
-            <h2 className="font-serif text-2xl text-slate-900">Payment successful 🎉</h2>
+            <h2 className="font-serif text-2xl text-slate-900">You&apos;re in — welcome to Creator! 🎉</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Your plan is active. Here are your 47-Day Growth Guarantee terms.
+              Your payment was successful. Here are your 47-Day Growth Guarantee terms.
             </p>
           </div>
         ) : (
           <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600">
-                <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.6}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-              </span>
-              <h2 className="font-serif text-xl text-slate-900">47-Day Growth Guarantee</h2>
-            </div>
+            <h2 className="font-serif text-xl text-slate-900">
+              {isGuarantee ? "47-Day Growth Guarantee" : "Terms & Conditions"}
+            </h2>
             <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
         )}
 
         {/* Body */}
         <div className="thin-scroll flex-1 overflow-y-auto px-6 py-5">
-          <p className="mb-5 text-sm leading-relaxed text-slate-600">{GUARANTEE_TERMS_INTRO}</p>
+          <p className="mb-5 text-sm leading-relaxed text-slate-600">{intro}</p>
+
+          {/* The key point — big, prominent, in the middle */}
+          <div
+            className={`mb-6 rounded-2xl border-2 p-5 text-center ${
+              accent === "emerald"
+                ? "border-emerald-300 bg-gradient-to-br from-emerald-50 to-teal-50"
+                : "border-violet-300 bg-gradient-to-br from-violet-50 to-fuchsia-50"
+            }`}
+          >
+            <p
+              className={`text-base font-extrabold leading-snug ${
+                accent === "emerald" ? "text-emerald-900" : "text-violet-900"
+              }`}
+            >
+              {highlight.title}
+            </p>
+            <p
+              className={`mt-2 text-[13px] leading-relaxed ${
+                accent === "emerald" ? "text-emerald-800/90" : "text-violet-800/90"
+              }`}
+            >
+              {highlight.body}
+            </p>
+          </div>
+
           <ol className="space-y-4">
-            {GUARANTEE_TERMS.map((t, i) => (
+            {sections.map((t, i) => (
               <li key={t.title} className="flex gap-3">
-                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-50 text-xs font-bold text-emerald-700">
+                <span
+                  className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                    accent === "emerald"
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-violet-50 text-violet-700"
+                  }`}
+                >
                   {i + 1}
                 </span>
                 <div>

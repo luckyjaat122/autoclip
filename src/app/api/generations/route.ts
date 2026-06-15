@@ -37,6 +37,17 @@ export async function POST(req: NextRequest) {
         402
       );
     }
+    // Common limit — only ONE generation at a time.
+    const mine = await listGenerationsByUser(user.id);
+    const active = mine.find(
+      (g) => !["completed", "failed"].includes(g.status)
+    );
+    if (active) {
+      return fail(
+        "You already have a generation in progress. Please wait for it to finish.",
+        409
+      );
+    }
   }
 
   let body: unknown;
@@ -51,7 +62,7 @@ export async function POST(req: NextRequest) {
   const videoId = extractVideoId(parsed.data.youtubeUrl);
   if (!videoId) return fail("That doesn't look like a valid YouTube URL");
 
-  const maxSrc = parseInt(process.env.MAX_SOURCE_SECONDS || "5400", 10);
+  const maxSrc = parseInt(process.env.MAX_SOURCE_SECONDS || "900", 10);
   let meta;
   try {
     meta = await fetchMetadata(parsed.data.youtubeUrl);

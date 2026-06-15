@@ -74,7 +74,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
             in one premium creator workspace.
           </p>
           <div className="mt-8 flex items-center gap-6 text-sm">
-            <Stat n="100" l="clips / month" />
+            <Stat n="60" l="clips / month" />
             <Stat n="9:16" l="auto reframe" />
             <Stat n="3" l="caption languages" />
           </div>

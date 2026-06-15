@@ -8,7 +8,7 @@ import { Plan } from "@/lib/types";
 
 const schema = z.object({
   paymentId: z.string(),
-  planId: z.enum(["starter", "pro", "max"]),
+  planId: z.enum(["starter", "creator", "pro"]),
   razorpay_order_id: z.string().optional(),
   razorpay_payment_id: z.string().optional(),
   razorpay_signature: z.string().optional(),

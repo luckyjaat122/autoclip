@@ -1,6 +1,6 @@
 // ---- Core domain types for AutoClip AI ----
 
-export type Plan = "free" | "starter" | "pro" | "max";
+export type Plan = "free" | "starter" | "creator" | "pro";
 export type SubscriptionStatus =
   | "inactive"
   | "active"
@@ -143,6 +143,15 @@ export interface PlanDef {
 
 export const CURRENCY = "INR";
 
+// Limits shared by every plan.
+export const MAX_INPUT_MINUTES = 15;
+export const COMMON_LIMITS: string[] = [
+  "Max video length: 15 minutes",
+  "1 generation at a time",
+  "Credits reset every month",
+  "Unused credits don't carry forward",
+];
+
 export const PLANS: PlanDef[] = [
   {
     id: "starter",
@@ -151,54 +160,54 @@ export const PLANS: PlanDef[] = [
     amountPaise: 29900,
     currency: CURRENCY,
     generations: 10,
-    maxInputMinutes: 20,
-    tagline: "Perfect for beginners",
+    maxInputMinutes: MAX_INPUT_MINUTES,
+    tagline: "Perfect for getting started",
     features: [
-      "AI viral detection",
-      "Auto captions",
-      "Smart reframing",
-      "HD export",
-      "20-min videos",
+      "10 viral clip generations / month",
+      "AI auto-captions",
+      "3 languages — English / Hindi / Hinglish",
+      "HD 1080×1920 export",
+      "Up to 15-min videos",
     ],
   },
   {
-    id: "pro",
-    name: "Pro",
+    id: "creator",
+    name: "Creator",
     price: 499,
     amountPaise: 49900,
     currency: CURRENCY,
-    generations: 35,
-    maxInputMinutes: 20,
-    tagline: "For active creators",
+    generations: 25,
+    maxInputMinutes: MAX_INPUT_MINUTES,
+    tagline: "For growing creators",
     highlight: true,
     features: [
+      "25 viral clip generations / month",
+      "Faster processing",
+      "Priority queue",
+      "Custom caption styles",
       "Everything in Starter",
-      "Viral score",
-      "AI titles",
-      "Priority processing",
-      "Multiple clip variations",
     ],
     guarantee: {
       badge: "100% Money-Back",
       title: "47-Day Growth Guarantee",
-      body: "If we don't grow your channel in 47 days, you get a full refund — 100% money-back, no questions asked.",
+      body: "Post daily using AutoClip clips for 47 days — if your channel doesn't grow, get a full refund.",
     },
   },
   {
-    id: "max",
-    name: "Max",
+    id: "pro",
+    name: "Pro",
     price: 999,
     amountPaise: 99900,
     currency: CURRENCY,
-    generations: 100,
-    maxInputMinutes: 20,
+    generations: 60,
+    maxInputMinutes: MAX_INPUT_MINUTES,
     tagline: "For power creators",
     features: [
-      "Everything in Pro",
+      "60 viral clip generations / month",
       "Fastest processing",
-      "Premium templates",
-      "Advanced analytics",
-      "Priority support",
+      "Highest priority queue",
+      "Early access to new features",
+      "Everything in Creator",
     ],
   },
 ];
