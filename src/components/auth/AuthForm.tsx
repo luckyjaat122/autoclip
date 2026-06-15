@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { api } from "@/lib/client";
+import { appUrl } from "@/lib/appUrl";
 import { supabaseBrowser } from "@/lib/supabaseBrowser";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
@@ -28,7 +29,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+          redirectTo: appUrl(`/auth/callback?next=${encodeURIComponent(next)}`),
         },
       });
       if (error) throw error;
