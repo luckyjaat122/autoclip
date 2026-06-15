@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(124, 58, 237, 0.07);
+  }
+  .glass-modal {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .gradient-text {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .gradient-violet {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+  }
+  .btn-primary {
+    @apply bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-violet-600/20 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-dark {
+    @apply bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Animated success checkmark (from theme) */
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+/* Caption-style word pop used in clip previews */
+.caption-word {
+  display: inline-block;
+  animation: captionPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes captionPop {
+  0% {
+    transform: scale(0.6) translateY(6px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 232, 240, 0.6) 25%,
+    rgba(241, 245, 249, 0.9) 37%,
+    rgba(226, 232, 240, 0.6) 63%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s linear infinite;
+}
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ===== 47-Day Creator Guarantee — premium green card ===== */
+.guarantee-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #ccfbf1 100%);
+  border: 1.5px solid #6ee7b7;
+  box-shadow: 0 6px 22px rgba(16, 185, 129, 0.22);
+  animation: guaranteeGlow 3.4s ease-in-out infinite;
+}
+@keyframes guaranteeGlow {
+  0%, 100% { box-shadow: 0 5px 18px rgba(16, 185, 129, 0.18); }
+  50% { box-shadow: 0 9px 30px rgba(16, 185, 129, 0.40); }
+}
+.guarantee-shine {
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  animation: shineSweep 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes shineSweep {
+  0% { left: -70%; }
+  55%, 100% { left: 140%; }
+}
+.guarantee-seal {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #34d399, #059669);
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.45),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.45);
+}
+.guarantee-seal svg {
+  width: 16px;
+  height: 16px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 3;
+}
+.guarantee-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #047857;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Custom scrollbar for dashboard */
+.thin-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.25);
+  border-radius: 999px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
