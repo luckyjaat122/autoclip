@@ -7,7 +7,7 @@ import {
   FIREBASE_STORAGE_BUCKET,
   firebaseBucket,
 } from "./firebase";
-import { SUPABASE_BUCKET, SUPABASE_ENABLED, supabaseAdmin } from "./supabase";
+import { SUPABASE_BUCKET, supabaseConfigured, supabaseAdmin } from "./supabase";
 
 /**
  * Pluggable file storage. Selected by STORAGE_PROVIDER = local | firebase | r2.
@@ -103,7 +103,7 @@ const supabaseProvider: StorageProvider = {
 };
 
 function activeProvider(): StorageProvider {
-  if (PROVIDER === "supabase" && SUPABASE_ENABLED) return supabaseProvider;
+  if (PROVIDER === "supabase" && supabaseConfigured()) return supabaseProvider;
   if (PROVIDER === "firebase" && FIREBASE_ADMIN_ENABLED) return firebaseProvider;
   if (PROVIDER === "r2") return r2Provider;
   return localProvider;

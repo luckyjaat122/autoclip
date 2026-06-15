@@ -15,6 +15,15 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
+
+# NEXT_PUBLIC_* are inlined by `next build`, so they MUST be present at build
+# time. Railway passes service variables to the Docker build as build args —
+# declare them here so the browser bundle gets the real values.
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 RUN npm run build
 
 ENV NODE_ENV=production
