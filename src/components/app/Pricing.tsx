@@ -18,6 +18,7 @@ export function Pricing({
   const [err, setErr] = useState("");
   const [termsModal, setTermsModal] = useState<null | "general" | "guarantee">(null);
   const [paidGuarantee, setPaidGuarantee] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const paidPlanRef = useRef<string | null>(null);
 
   async function choose(planId: string) {
@@ -190,7 +191,7 @@ export function Pricing({
                 <div className="flex-1" />
                 <button
                   onClick={() => choose(plan.id)}
-                  disabled={busy !== null || isCurrent}
+                  disabled={busy !== null || isCurrent || !agreed}
                   className={`mt-6 rounded-xl px-5 py-3 text-sm font-semibold transition-all disabled:opacity-60 ${
                     plan.highlight
                       ? "bg-violet-600 text-white hover:bg-violet-700"
@@ -220,17 +221,33 @@ export function Pricing({
               </span>
             ))}
           </div>
-          <p className="mt-4 text-center text-xs text-slate-400">
-            Priority processing on the Pro plan. By subscribing to any plan you
-            agree to our{" "}
-            <button
-              onClick={() => setTermsModal("general")}
-              className="font-semibold text-violet-600 underline underline-offset-2 hover:text-violet-700"
-            >
-              Terms &amp; Conditions
-            </button>
-            .
+          <p className="mt-3 text-center text-xs text-slate-400">
+            Priority processing on the Pro plan.
           </p>
+          <label className="mx-auto mt-4 flex max-w-md cursor-pointer items-start justify-center gap-2.5 text-xs text-slate-600">
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-violet-600"
+            />
+            <span>
+              I have read and agree to the{" "}
+              <button
+                type="button"
+                onClick={() => setTermsModal("general")}
+                className="font-semibold text-violet-600 underline underline-offset-2 hover:text-violet-700"
+              >
+                Terms &amp; Conditions
+              </button>
+              {" "}— including the copyright and refund policy.
+            </span>
+          </label>
+          {!agreed && (
+            <p className="mt-2 text-center text-[11px] text-slate-400">
+              Please accept the Terms to continue.
+            </p>
+          )}
         </div>
       </div>
     </section>
