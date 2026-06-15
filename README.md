@@ -34,7 +34,7 @@ Firestore · ffmpeg · yt-dlp · whisper.cpp · Razorpay**.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000 (or the printed port)
+npm run dev      # opens the local URL it prints
 ```
 
 ### Required system tools (already installed on this machine)

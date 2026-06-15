@@ -11,8 +11,10 @@ export async function GET(req: NextRequest) {
     const supabase = supabaseServer();
     await supabase.auth.exchangeCodeForSession(code);
   }
-  // Prefer the request origin (real deployed host); fall back to appUrl.
-  const base = req.nextUrl.origin || appUrl();
+  // In production redirect to the deployed domain; in dev use the request
+  // origin (so the actual local port is respected). Never localhost in prod.
+  const base =
+    process.env.NODE_ENV === "production" ? appUrl() : req.nextUrl.origin;
   const dest = next.startsWith("http") ? next : new URL(next, base).toString();
   return NextResponse.redirect(dest);
 }
